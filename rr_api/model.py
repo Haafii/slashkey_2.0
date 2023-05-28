@@ -22,9 +22,10 @@ class bmiModel(Base):
     weight = Column(Float)
     activity = Column(Float)
     bmi_value = Column(Float)
-    bmr_value = Column(Float)
+    bmr_value = Column(Float) 
     owner_id = Column(Integer, ForeignKey("users.id"))
-
+    calories_needed = Column(Float, default = 0)
+ 
     owner = relationship("user", back_populates="bmitable")
 
    

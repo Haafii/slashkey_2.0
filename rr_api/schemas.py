@@ -50,7 +50,11 @@ class BMI(BMIBase):
     class Config:
         orm_mode = True
 
-  
+class BMIModel(BMI):
+    calories_needed: float
+      
+    class Config:
+        orm_mode = True
 
     
  

@@ -4,3 +4,6 @@ pydantic
 sqlalchemy
 python-jose
 python-multipart
+pandas
+scikit-learn
+scikit-learn-intelex

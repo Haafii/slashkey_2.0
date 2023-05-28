@@ -1,4 +1,10 @@
 
+from fastapi.responses import JSONResponse
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
 from fastapi import FastAPI,Depends,HTTPException,status
 import schemas
 from database import engine,SessionLocal
@@ -94,14 +100,48 @@ def bmi(request: schemas.BMIFind ,db : Session = Depends(get_db), current_user: 
 @app.get('/bmi',tags=['bmi'])
 def showbmi(db : Session = Depends(get_db), current_user: schemas.User = Depends(oaut2.get_current_active_user)):
     bmi = db.query(model.bmiModel).filter(model.bmiModel.owner_id == current_user.id).first()
-    return "hello"
+    return bmi
+
+
+# Load the data once during startup
+data = pd.read_csv('cleaned_data.csv')
+
+# Separate the features (activity_level, BMR) from the target variable (calories_to_maintain_weight)
+X = data[['activity_level', 'BMR']]
+y = data['calories_to_maintain_weight']
+
+# Create a linear regression model
+modelML = LinearRegression()
+
+# Train the model once during startup
+modelML.fit(X, y)
+
+@app.put("/model")
+def predict_calories(request: schemas.BMI, db : Session = Depends(get_db), current_user: schemas.User = Depends(oaut2.get_current_active_user)):
+    # Create a DataFrame with user input
+    user_data = pd.DataFrame({'activity_level': [request.activity], 'BMR': [request.bmr_value]})
+
+    # Make predictions
+    predicted_calories = modelML.predict(user_data)
+    predicted_calories=predicted_calories.round()
+    update_bmi = db.query(model.bmiModel).filter(model.bmiModel.owner_id == current_user.id).first()
+
+    if not update_bmi:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Blog not found")
+    #modelData = model.bmiModel(calorie_needed = predicted_calories, owner_id = current_user.id)
+    update_bmi.calories_needed = predicted_calories[0]
+    # db.add(current_user.calorie_needed)
+    db.commit()
+    # db.refresh(current_user.calorie_needed)
+    print (predicted_calories)
+    # Return the predicted calories as a JSON response 
+    response_data = {"predicted_calories": predicted_calories[0]}
+    return JSONResponse(content=response_data)
+ 
+   
+    
+ 
   
  
-
-
-
-
-
-
 
  
