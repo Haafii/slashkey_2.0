@@ -90,6 +90,11 @@ def bmi(request: schemas.BMIFind ,db : Session = Depends(get_db), current_user: 
     db.commit()
     db.refresh(bmi_data) 
     return bmi_data   
+   
+@app.get('/bmi',tags=['bmi'])
+def showbmi(db : Session = Depends(get_db), current_user: schemas.User = Depends(oaut2.get_current_active_user)):
+    bmi = db.query(model.bmiModel).filter(model.bmiModel.owner_id == current_user.id).first()
+    return bmi
   
  
 
