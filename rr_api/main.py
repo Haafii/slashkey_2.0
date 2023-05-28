@@ -1,14 +1,14 @@
 
 from fastapi import FastAPI,Depends,HTTPException,status
-from . import schemas
-from .database import engine,SessionLocal
-from . import model
+import schemas
+from database import engine,SessionLocal
+import model
 from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
-from .tocken1 import create_access_token
+from tocken1 import create_access_token
 from sqlalchemy import desc
 import uuid
-from . import oaut2
+import oaut2
 # from typing import Annotated
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
