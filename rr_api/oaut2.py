@@ -1,12 +1,12 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import Depends,HTTPException,status
-from .database import engine,SessionLocal
+from database import engine,SessionLocal
 
-from .tocken1 import verifytoken
-from . import schemas 
+from tocken1 import verifytoken
+import schemas 
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from . import model
+import model
 
 def get_db():
     db = SessionLocal()
