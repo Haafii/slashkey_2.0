@@ -10,9 +10,9 @@ This data is used to determine what health practices he should follow to be at h
 This project also includes a mediapipe application that helps o keep track of user, whether he is taking the recommended number of pushups, dumbells etc or not.
 
 ## Tools Used
-*React JS - Used for front-end application
-*FastAPI - Used in back-end applications
-*Mediapipe 
+* React JS - Used for front-end application
+* FastAPI - Used in back-end applications
+* Mediapipe 
 
 
 **Note:**
